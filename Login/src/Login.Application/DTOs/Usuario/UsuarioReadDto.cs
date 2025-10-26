@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Login.Application.DTOs.Usuario
+{
+    public class UsuarioReadDto
+    {
+        public Guid Id { get; set; }
+        public string Email { get; set; }
+        public string Nombre { get; set; }
+        public string Apellido { get; set; }
+        public string? Celular { get; set; }
+        public Guid RolId { get; set; }
+        public DateTimeOffset CreadoEn { get; set; }
+    }
+}
