@@ -5,7 +5,6 @@ using Login.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// enable CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("MicroserviceCorsPolicy",
@@ -20,11 +19,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-// Conexión a PostgreSQL
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString,
-        // ↓ AÑADE ESTA LÍNEA ↓
+        
         b => b.MigrationsAssembly("Login.Infrastructure")
     )
 );
@@ -37,14 +36,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    // Creamos un "scope" de servicios para obtener el DbContext
+   
     using (var scope = app.Services.CreateScope())
     {
         var services = scope.ServiceProvider;
         try
         {
             var context = services.GetRequiredService<AppDbContext>();
-            // Llama al método estático
             await DataSeeder.SeedDataAsync(context);
         }
         catch (Exception ex)

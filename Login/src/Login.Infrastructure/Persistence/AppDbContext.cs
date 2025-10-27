@@ -28,7 +28,7 @@ namespace Login.Infrastructure.Persistence
             {
                 entity.ToTable("Usuario");
                 entity.HasKey(u => u.Id);
-
+                entity.HasIndex(u => u.email).IsUnique();
 
                 entity.Property(u => u.email).HasMaxLength(50).IsRequired();
                 entity.Property(u => u.password).HasMaxLength(100).IsRequired();

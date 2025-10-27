@@ -51,6 +51,12 @@ public class UsuariosController : ControllerBase
         }
         return Ok(usuario);
     }
+    [HttpGet]
+    public async Task<IActionResult> GetAllUsuarios()
+    {
+        var usuarios = await _usuarioService.GetAllUsuariosAsync();
+        return Ok(usuarios); // Devuelve la lista de usuarios (o una lista vacía)
+    }
 
     // --- MODIFICACIÓN (Actualizar Usuario) ---
     // PUT /api/Usuarios/123e4567-e89b-12d3-a456-426614174000
