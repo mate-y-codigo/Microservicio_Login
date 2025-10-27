@@ -155,7 +155,7 @@
 	"variable": [
 		{
 			"key": "baseUrl",
-			"value": "https://localhost:7001",
+			"value": "https://localhost:63094",
 			"type": "string"
 		},
 		{
