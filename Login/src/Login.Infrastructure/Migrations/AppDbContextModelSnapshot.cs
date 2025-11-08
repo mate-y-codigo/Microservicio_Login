@@ -78,17 +78,17 @@ namespace Login.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("62da6d8c-0789-40e8-b889-fead572d9994"),
+                            Id = new Guid("c27acd75-1300-4165-8153-7c0a4bb24dc1"),
                             nombre = "Admin"
                         },
                         new
                         {
-                            Id = new Guid("c8ae1137-7c73-4350-a1b5-2eaf3beece99"),
+                            Id = new Guid("bedb9e59-57d9-453d-8570-00531cfbae4a"),
                             nombre = "Entrenador"
                         },
                         new
                         {
-                            Id = new Guid("443423fb-a792-42c5-87d7-030f081a4c89"),
+                            Id = new Guid("6b326dbe-3fa6-4528-a24d-379be371ef0d"),
                             nombre = "Alumno"
                         });
                 });
@@ -143,6 +143,9 @@ namespace Login.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("email")
+                        .IsUnique();
 
                     b.HasIndex("rol_id");
 

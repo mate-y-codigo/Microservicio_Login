@@ -1,86 +1,96 @@
 ﻿using Login.Application.DTOs.Usuario;
 using Login.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
-namespace Login.Api.Controllers;
-
-[ApiController]
-[Route("api/[controller]")] // Ruta base: /api/Usuarios
-public class UsuariosController : ControllerBase
+namespace Login.Api.Controllers
 {
-    private readonly IUsuarioService _usuarioService;
-
-    // El servicio es inyectado automáticamente gracias a Program.cs
-    public UsuariosController(IUsuarioService usuarioService)
+    [Authorize] // <-- Exige estar logueado para TODO
+    [ApiController]
+    [Route("api/[controller]")]
+    public class UsuariosController : ControllerBase
     {
-        _usuarioService = usuarioService;
-    }
+        private readonly IUsuarioService _usuarioService;
 
-    // --- ALTA (Crear Usuario) ---
-    // POST /api/Usuarios
-    [HttpPost]
-    public async Task<IActionResult> CreateUsuario([FromBody] UsuarioCreateDto usuarioDto)
-    {
-        if (!ModelState.IsValid)
+        public UsuariosController(IUsuarioService usuarioService)
         {
-            return BadRequest(ModelState);
+            _usuarioService = usuarioService;
         }
 
-        try
+        // POST /api/Usuarios
+        [HttpPost]
+        [Authorize(Roles = "Admin, Entrenador")] // <-- Solo Admins y Entrenadores
+        public async Task<IActionResult> CreateUsuario([FromBody] UsuarioCreateDto usuarioDto)
         {
-            var nuevoUsuario = await _usuarioService.CreateUsuarioAsync(usuarioDto);
-            // Devuelve un 201 Created con la ubicación del nuevo recurso y el DTO de lectura
-            return CreatedAtAction(nameof(GetUsuarioById), new { id = nuevoUsuario.Id }, nuevoUsuario);
-        }
-        catch (Exception ex)
-        {
-            // Manejo de errores (ej. email duplicado)
-            return StatusCode(500, $"Error interno: {ex.Message}");
-        }
-    }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-    // --- LECTURA (Obtener Usuario) ---
-    // GET /api/Usuarios/123e4567-e89b-12d3-a456-426614174000
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetUsuarioById(Guid id)
-    {
-        var usuario = await _usuarioService.GetUsuarioByIdAsync(id);
-        if (usuario == null)
-        {
-            return NotFound();
-        }
-        return Ok(usuario);
-    }
-    [HttpGet]
-    public async Task<IActionResult> GetAllUsuarios()
-    {
-        var usuarios = await _usuarioService.GetAllUsuariosAsync();
-        return Ok(usuarios); // Devuelve la lista de usuarios (o una lista vacía)
-    }
+            var callerRole = User.FindFirstValue(ClaimTypes.Role);
+            if (string.IsNullOrEmpty(callerRole))
+            {
+                return Unauthorized("El token no contiene un rol válido.");
+            }
 
-    // --- MODIFICACIÓN (Actualizar Usuario) ---
-    // PUT /api/Usuarios/123e4567-e89b-12d3-a456-426614174000
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateUsuario(Guid id, [FromBody] UsuarioUpdateDto updateDto)
-    {
-        var result = await _usuarioService.UpdateUsuarioAsync(id, updateDto);
-        if (!result)
-        {
-            return NotFound(); // O BadRequest si la actualización falló
+            try
+            {
+                var nuevoUsuario = await _usuarioService.CreateUsuarioAsync(usuarioDto, callerRole);
+                return CreatedAtAction(nameof(GetUsuarioById), new { id = nuevoUsuario.Id }, nuevoUsuario);
+            }
+            catch (Exception ex)
+            {
+                // Devolvemos 400 (Bad Request) con el mensaje de error de la lógica de negocio
+                return BadRequest(new { message = ex.Message });
+            }
         }
-        return NoContent(); // 204 No Content es la respuesta estándar para un PUT exitoso
-    }
 
-    // --- BAJA (Eliminar Usuario) ---
-    // DELETE /api/Usuarios/123e4567-e89b-12d3-a456-426614174000
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteUsuario(Guid id)
-    {
-        var result = await _usuarioService.DeleteUsuarioAsync(id);
-        if (!result)
+        // GET /api/Usuarios/{id}
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUsuarioById(Guid id)
         {
-            return NotFound();
+            var usuario = await _usuarioService.GetUsuarioByIdAsync(id);
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+            return Ok(usuario);
         }
-        return NoContent(); // 204 No Content
+
+        // GET /api/Usuarios
+        [HttpGet]
+        [Authorize(Roles = "Admin, Entrenador")] // <-- Solo Admins y Entrenadores
+        public async Task<IActionResult> GetAllUsuarios()
+        {
+            var usuarios = await _usuarioService.GetAllUsuariosAsync();
+            return Ok(usuarios);
+        }
+
+        // PUT /api/Usuarios/{id}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUsuario(Guid id, [FromBody] UsuarioUpdateDto updateDto)
+        {
+            // (La lógica de "solo puedo editar mi perfil" iría en el UsuarioService)
+            var result = await _usuarioService.UpdateUsuarioAsync(id, updateDto);
+            if (!result)
+            {
+                return NotFound();
+            }
+            return NoContent();
+        }
+
+        // DELETE /api/Usuarios/{id}
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")] // <-- Solo Admins
+        public async Task<IActionResult> DeleteUsuario(Guid id)
+        {
+            var result = await _usuarioService.DeleteUsuarioAsync(id);
+            if (!result)
+            {
+                return NotFound();
+            }
+            return NoContent();
+        }
     }
 }

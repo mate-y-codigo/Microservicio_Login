@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Login.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251026222731_SetNullOnEntrenadorDelete")]
-    partial class SetNullOnEntrenadorDelete
+    [Migration("20251108190353_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -81,17 +81,17 @@ namespace Login.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("84ca0972-519a-4207-81cf-2912595a88fa"),
+                            Id = new Guid("c27acd75-1300-4165-8153-7c0a4bb24dc1"),
                             nombre = "Admin"
                         },
                         new
                         {
-                            Id = new Guid("d13e9d2f-f4c9-446e-a69d-3c1c5db142b6"),
+                            Id = new Guid("bedb9e59-57d9-453d-8570-00531cfbae4a"),
                             nombre = "Entrenador"
                         },
                         new
                         {
-                            Id = new Guid("abbeee1d-f039-4349-8a3f-456a90c76838"),
+                            Id = new Guid("6b326dbe-3fa6-4528-a24d-379be371ef0d"),
                             nombre = "Alumno"
                         });
                 });
@@ -101,6 +101,11 @@ namespace Login.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<bool>("activo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
 
                     b.Property<DateTimeOffset>("actualizado_en")
                         .ValueGeneratedOnAdd()
@@ -141,6 +146,9 @@ namespace Login.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("email")
+                        .IsUnique();
 
                     b.HasIndex("rol_id");
 
