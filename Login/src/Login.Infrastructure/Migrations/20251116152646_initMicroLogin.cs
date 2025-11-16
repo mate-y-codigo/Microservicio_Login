@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -8,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Login.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class initMicroLogin : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,7 +18,8 @@ namespace Login.Infrastructure.Migrations
                 name: "Rol",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     nombre = table.Column<string>(type: "character varying(25)", maxLength: 25, nullable: false)
                 },
                 constraints: table =>
@@ -35,7 +37,9 @@ namespace Login.Infrastructure.Migrations
                     nombre = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     apellido = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     celular = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    rol_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    peso = table.Column<decimal>(type: "numeric(5,2)", nullable: true),
+                    altura = table.Column<decimal>(type: "numeric(5,2)", nullable: true),
+                    rol_id = table.Column<int>(type: "integer", nullable: false),
                     creado_en = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     actualizado_en = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     activo = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true)
@@ -56,8 +60,6 @@ namespace Login.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    altura_cm = table.Column<decimal>(type: "numeric(5,2)", nullable: false),
-                    peso_kg = table.Column<decimal>(type: "numeric(5,2)", nullable: false),
                     fecha_nacimiento = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     notas = table.Column<string>(type: "text", nullable: true),
                     Direccion = table.Column<string>(type: "text", nullable: false),
@@ -86,9 +88,9 @@ namespace Login.Infrastructure.Migrations
                 columns: new[] { "Id", "nombre" },
                 values: new object[,]
                 {
-                    { new Guid("6b326dbe-3fa6-4528-a24d-379be371ef0d"), "Alumno" },
-                    { new Guid("bedb9e59-57d9-453d-8570-00531cfbae4a"), "Entrenador" },
-                    { new Guid("c27acd75-1300-4165-8153-7c0a4bb24dc1"), "Admin" }
+                    { 1, "Admin" },
+                    { 2, "Entrenador" },
+                    { 3, "Alumno" }
                 });
 
             migrationBuilder.CreateIndex(

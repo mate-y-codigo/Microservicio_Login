@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Login.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251116150226_initMicroLogin")]
+    [Migration("20251116152646_initMicroLogin")]
     partial class initMicroLogin
     {
         /// <inheritdoc />
