@@ -24,8 +24,10 @@ namespace Login.Application.DTOs.Usuario
         public string Apellido { get; set; }
 
         public string? Celular { get; set; }
+        public decimal? peso { get; set; }
+        public decimal? altura { get; set; }
 
         [Required]
-        public Guid RolId { get; set; } // El ID del rol ("Alumno", "Entrenador", etc.)
+        public int RolId { get; set; } // El ID del rol ("Alumno", "Entrenador", etc.)
     }
 }

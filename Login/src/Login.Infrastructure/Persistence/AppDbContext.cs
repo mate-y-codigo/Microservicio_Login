@@ -34,6 +34,8 @@ namespace Login.Infrastructure.Persistence
                 entity.Property(u => u.password).HasMaxLength(100).IsRequired();
                 entity.Property(u => u.nombre).HasMaxLength(50);
                 entity.Property(u => u.apellido).HasMaxLength(50);
+                entity.Property(a => a.altura).HasColumnType("numeric(5,2)");
+                entity.Property(a => a.peso).HasColumnType("numeric(5,2)");
 
                 entity.Property(u => u.celular).HasMaxLength(50);
 
@@ -72,9 +74,9 @@ namespace Login.Infrastructure.Persistence
                 entity.Property(r => r.nombre).HasMaxLength(25).IsRequired();
 
                 entity.HasData(
-                    new Rol { Id = Guid.NewGuid(), nombre = "Admin" },
-                    new Rol { Id = Guid.NewGuid(), nombre = "Entrenador" },
-                    new Rol { Id = Guid.NewGuid(), nombre = "Alumno" }
+                    new Rol { Id = 1, nombre = "Admin" },
+                    new Rol { Id = 2, nombre = "Entrenador" },
+                    new Rol { Id = 3, nombre = "Alumno" }
                 );
 
             });
@@ -85,8 +87,6 @@ namespace Login.Infrastructure.Persistence
                 entity.ToTable("Alumno");
                 entity.HasKey(a => a.Id);
 
-                entity.Property(a => a.altura_cm).HasColumnType("numeric(5,2)");
-                entity.Property(a => a.peso_kg).HasColumnType("numeric(5,2)");
                 entity.Property(a => a.fecha_nacimiento).IsRequired();
                 entity.Property(a => a.Direccion).HasColumnType("text").IsRequired();
                 entity.Property(a => a.notas).HasColumnType("text").IsRequired(false);

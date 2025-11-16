@@ -9,7 +9,7 @@ namespace Login.Infrastructure.Persistence
         private readonly AppDbContext _context;
         public RolRepository(AppDbContext context) { _context = context; }
 
-        public async Task<Rol?> GetByIdAsync(Guid id)
+        public async Task<Rol?> GetByIdAsync(int id)
         {
             return await _context.Roles.FindAsync(id);
         }

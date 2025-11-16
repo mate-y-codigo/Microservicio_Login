@@ -14,9 +14,10 @@ namespace Login.Domain.Entities
         public string password { get; set; }
         public string nombre { get; set; }
         public string apellido { get; set; }
-      
         public string celular { get; set; }
-        public Guid rol_id { get; set; }
+        public decimal? peso { get; set; }
+        public decimal? altura { get; set; }
+        public int rol_id { get; set; }
         public DateTimeOffset creado_en { get; set; }
         public DateTimeOffset actualizado_en { get; set; }
         public bool activo { get; set; } = true;

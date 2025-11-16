@@ -9,8 +9,6 @@ namespace Login.Domain.Entities
     public class Alumno
     {
         public Guid Id { get; set; }
-        public decimal altura_cm { get; set; }
-        public decimal peso_kg { get; set; }
         public DateTimeOffset fecha_nacimiento { get; set; }
         public string notas { get; set; }
         public required string Direccion { get; set; }

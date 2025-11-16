@@ -71,8 +71,18 @@ namespace Login.Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUsuario(Guid id, [FromBody] UsuarioUpdateDto updateDto)
         {
-            // (La lógica de "solo puedo editar mi perfil" iría en el UsuarioService)
-            var result = await _usuarioService.UpdateUsuarioAsync(id, updateDto);
+            var callerRole = User.FindFirstValue(ClaimTypes.Role);
+            if (string.IsNullOrEmpty(callerRole))
+                return Unauthorized("El token no contiene un rol válido.");
+
+            var callerIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(callerIdString))
+                return Unauthorized("El token no contiene un ID de usuario (NameIdentifier).");
+
+            if (!Guid.TryParse(callerIdString, out Guid callerId))
+                return Unauthorized("El ID de usuario en el token no es un GUID válido.");
+
+            var result = await _usuarioService.UpdateUsuarioAsync(id, updateDto, callerRole, callerId);
             if (!result)
             {
                 return NotFound();

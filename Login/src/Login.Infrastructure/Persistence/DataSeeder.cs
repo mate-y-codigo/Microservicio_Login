@@ -79,6 +79,8 @@ namespace Login.Infrastructure.Persistence
                 apellido = "Perez",
                 activo = true,
                 celular = "5544332211",
+                altura = 180,
+                peso = 75,
                 rol_id = rolAlumno.Id, 
                 creado_en = DateTimeOffset.UtcNow,
                 actualizado_en = DateTimeOffset.UtcNow
@@ -90,8 +92,6 @@ namespace Login.Infrastructure.Persistence
             var infoAlumno = new Alumno
             {
                 Id = Guid.NewGuid(),
-                altura_cm = 180,
-                peso_kg = 75,
                 fecha_nacimiento = new DateTimeOffset(new DateTime(2000, 5, 15), TimeSpan.Zero),
                 Direccion = "Calle Falsa 123",
                 notas = "Alumno de prueba inicial",

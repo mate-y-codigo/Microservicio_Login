@@ -62,6 +62,12 @@ namespace Login.Application.Services
                 AlumnosEntrenados = new List<Alumno>()
             };
 
+            if (rolParaAsignar.nombre == "Alumno" && usuarioCreateDto.peso.HasValue)
+                nuevoUsuario.peso = usuarioCreateDto.peso;
+
+            if (rolParaAsignar.nombre == "Alumno" && usuarioCreateDto.altura.HasValue)
+                nuevoUsuario.altura = usuarioCreateDto.altura;
+
             await _usuarioRepository.AddAsync(nuevoUsuario);
 
             // 5. Mapear y devolver
@@ -72,23 +78,36 @@ namespace Login.Application.Services
                 Nombre = nuevoUsuario.nombre,
                 Apellido = nuevoUsuario.apellido,
                 Celular = nuevoUsuario.celular,
+                Altura = nuevoUsuario.altura,
+                Peso = nuevoUsuario.peso,
                 RolId = nuevoUsuario.rol_id,
+                Rol = rolParaAsignar.nombre,
                 CreadoEn = nuevoUsuario.creado_en
             };
         }
 
-        public async Task<bool> UpdateUsuarioAsync(Guid id, UsuarioUpdateDto usuarioUpdateDto)
+        public async Task<bool> UpdateUsuarioAsync(Guid id, UsuarioUpdateDto usuarioUpdateDto, string callerRole, Guid callerId)
         {
             var usuario = await _usuarioRepository.GetByIdAsync(id); // (Ahora solo encuentra usuarios activos)
             if (usuario == null)
-            {
                 return false;
-            }
+
+            if (callerRole == "Alumno" && id != callerId)
+                throw new Exception("Un alumno solo puede modificar su propio perfil.");
 
             usuario.nombre = usuarioUpdateDto.Nombre;
             usuario.apellido = usuarioUpdateDto.Apellido;
             usuario.celular = usuarioUpdateDto.Celular;
             usuario.actualizado_en = DateTimeOffset.UtcNow;
+
+            if (usuario.Rol.nombre == "Alumno")
+            {
+                if (usuarioUpdateDto.Peso.HasValue)
+                    usuario.peso = usuarioUpdateDto.Peso;
+
+                if (usuarioUpdateDto.Altura.HasValue)
+                    usuario.altura = usuarioUpdateDto.Altura;
+            }
 
             await _usuarioRepository.UpdateAsync(usuario);
             return true;
@@ -125,7 +144,10 @@ namespace Login.Application.Services
                 Nombre = usuario.nombre,
                 Apellido = usuario.apellido,
                 Celular = usuario.celular,
+                Altura = (usuario.Rol.nombre == "Alumno") ? usuario.altura : null,
+                Peso = (usuario.Rol.nombre == "Alumno") ? usuario.peso : null,
                 RolId = usuario.rol_id,
+                Rol = usuario.Rol.nombre,
                 CreadoEn = usuario.creado_en
             };
         }
@@ -140,7 +162,10 @@ namespace Login.Application.Services
                 Nombre = usuario.nombre,
                 Apellido = usuario.apellido,
                 Celular = usuario.celular,
+                Altura = (usuario.Rol.nombre == "Alumno") ? usuario.altura : null,
+                Peso = (usuario.Rol.nombre == "Alumno") ? usuario.peso : null,
                 RolId = usuario.rol_id,
+                Rol = usuario.Rol.nombre,
                 CreadoEn = usuario.creado_en
             });
             return usuariosDto;

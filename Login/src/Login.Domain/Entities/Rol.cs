@@ -8,7 +8,7 @@ namespace Login.Domain.Entities
 {
     public class Rol
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public required string nombre { get; set; }
 
         // Relaciones

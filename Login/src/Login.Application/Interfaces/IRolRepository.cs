@@ -4,6 +4,6 @@ namespace Login.Application.Interfaces
 {
     public interface IRolRepository
     {
-        Task<Rol?> GetByIdAsync(Guid id);
+        Task<Rol?> GetByIdAsync(int id);
     }
 }

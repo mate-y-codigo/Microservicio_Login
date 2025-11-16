@@ -22,6 +22,7 @@ namespace Login.Infrastructure.Persistence
         public async Task<Usuario?> GetByIdAsync(Guid id)
         {
             return await _context.Usuarios
+                .Include(u => u.Rol)
                 .FirstOrDefaultAsync(u => u.Id == id && u.activo == true);
         }
 
@@ -40,6 +41,7 @@ namespace Login.Infrastructure.Persistence
         public async Task<IEnumerable<Usuario>> GetAllAsync()
         {
             return await _context.Usuarios
+                .Include(u => u.Rol)
                 .Where(u => u.activo == true)
                 .AsNoTracking()
                 .ToListAsync();
