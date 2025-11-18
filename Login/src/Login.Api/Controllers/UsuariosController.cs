@@ -6,7 +6,6 @@ using System.Security.Claims;
 
 namespace Login.Api.Controllers
 {
-    [Authorize] // <-- Exige estar logueado para TODO
     [ApiController]
     [Route("api/[controller]")]
     public class UsuariosController : ControllerBase
