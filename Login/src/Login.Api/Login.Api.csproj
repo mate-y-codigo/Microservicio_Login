@@ -22,7 +22,7 @@
     <ProjectReference Include="..\Login.Infrastructure\Login.Infrastructure.csproj" />
     <ProjectReference Include="..\Login.Application\Login.Application.csproj" />
     <ProjectReference Include="..\Login.Domain\Login.Domain.csproj" />
-    <ProjectReference Include="..\Login.Shared\Login.Shared.csproj" />
+    
   </ItemGroup>
 
 </Project>

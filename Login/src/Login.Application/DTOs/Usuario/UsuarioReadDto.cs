@@ -21,5 +21,6 @@ namespace Login.Application.DTOs.Usuario
         public int RolId { get; set; }
         public string Rol { get; set; }
         public DateTimeOffset CreadoEn { get; set; }
+        public bool activo { get; set; }
     }
 }
