@@ -66,6 +66,14 @@ namespace Login.Api.Controllers
             return Ok(usuarios);
         }
 
+        [HttpGet("actives")]
+        [Authorize(Roles = "Admin, Entrenador")] // <-- Solo Admins y Entrenadores
+        public async Task<IActionResult> GetAllAlumnosActivosAsync()
+        {
+            var usuarios = await _usuarioService.GetAllAlumnosActivosAsync();
+            return Ok(usuarios);
+        }
+
         // PUT /api/Usuarios/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUsuario(Guid id, [FromBody] UsuarioUpdateDto updateDto)

@@ -42,6 +42,14 @@ namespace Login.Infrastructure.Persistence
         {
             return await _context.Usuarios
                 .Include(u => u.Rol)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Usuario>> GetAllAlumnosActivosAsync()
+        {
+            return await _context.Usuarios
+                .Include(u => u.Rol)
                 .Where(u => u.activo == true && u.Rol.nombre == "Alumno")
                 .AsNoTracking()
                 .ToListAsync();

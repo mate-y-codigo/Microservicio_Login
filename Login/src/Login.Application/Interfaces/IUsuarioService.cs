@@ -9,5 +9,6 @@ namespace Login.Application.Interfaces
         Task<bool> DeleteUsuarioAsync(Guid id);
         Task<UsuarioReadDto?> GetUsuarioByIdAsync(Guid id);
         Task<IEnumerable<UsuarioReadDto>> GetAllUsuariosAsync();
+        Task<IEnumerable<UsuarioReadDto>> GetAllAlumnosActivosAsync();
     }
 }

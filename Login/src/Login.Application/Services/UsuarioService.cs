@@ -174,5 +174,25 @@ namespace Login.Application.Services
             });
             return usuariosDto;
         }
+
+        public async Task<IEnumerable<UsuarioReadDto>> GetAllAlumnosActivosAsync()
+        {
+            var usuarios = await _usuarioRepository.GetAllAlumnosActivosAsync();
+            var usuariosDto = usuarios.Select(usuario => new UsuarioReadDto
+            {
+                Id = usuario.Id,
+                Email = usuario.email,
+                Nombre = usuario.nombre,
+                Apellido = usuario.apellido,
+                Celular = usuario.celular,
+                Altura = (usuario.Rol.nombre == "Alumno") ? usuario.altura : null,
+                Peso = (usuario.Rol.nombre == "Alumno") ? usuario.peso : null,
+                RolId = usuario.rol_id,
+                Rol = usuario.Rol.nombre,
+                CreadoEn = usuario.creado_en,
+                activo = usuario.activo
+            });
+            return usuariosDto;
+        }
     }
 }
