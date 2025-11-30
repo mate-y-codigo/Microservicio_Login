@@ -22,8 +22,8 @@ namespace Login.Application.DTOs.Usuario
 
         [Required]
         public string Apellido { get; set; }
-
-        public string? Celular { get; set; }
+        [Required]
+        public string Celular { get; set; }
         public decimal? peso { get; set; }
         public decimal? altura { get; set; }
 

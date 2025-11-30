@@ -23,7 +23,7 @@ namespace Login.Infrastructure.Persistence
         {
             return await _context.Usuarios
                 .Include(u => u.Rol)
-                .FirstOrDefaultAsync(u => u.Id == id && u.activo == true);
+                .FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task UpdateAsync(Usuario usuario)

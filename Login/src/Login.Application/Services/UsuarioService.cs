@@ -84,8 +84,6 @@ namespace Login.Application.Services
                 Rol = rolParaAsignar.nombre,
                 CreadoEn = nuevoUsuario.creado_en,
                 activo = nuevoUsuario.activo
-
-
             };
         }
 
@@ -102,6 +100,7 @@ namespace Login.Application.Services
             usuario.apellido = usuarioUpdateDto.Apellido;
             usuario.celular = usuarioUpdateDto.Celular;
             usuario.actualizado_en = DateTimeOffset.UtcNow;
+            usuario.activo = usuarioUpdateDto.Activo;
 
             if (usuario.Rol.nombre == "Alumno")
             {
