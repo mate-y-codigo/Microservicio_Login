@@ -150,13 +150,14 @@ namespace Login.Application.Services
                 Peso = (usuario.Rol.nombre == "Alumno") ? usuario.peso : null,
                 RolId = usuario.rol_id,
                 Rol = usuario.Rol.nombre,
-                CreadoEn = usuario.creado_en
+                CreadoEn = usuario.creado_en,
+                activo = usuario.activo
             };
         }
 
         public async Task<IEnumerable<UsuarioReadDto>> GetAllUsuariosAsync()
         {
-            var usuarios = await _usuarioRepository.GetAllAsync(); // (Ya filtra por 'activo == true')
+            var usuarios = await _usuarioRepository.GetAllAsync();
             var usuariosDto = usuarios.Select(usuario => new UsuarioReadDto
             {
                 Id = usuario.Id,
