@@ -42,7 +42,7 @@ namespace Login.Infrastructure.Persistence
         {
             return await _context.Usuarios
                 .Include(u => u.Rol)
-                //.Where(u => u.activo == true)
+                .Where(u => u.activo == true && u.Rol.nombre == "Alumno")
                 .AsNoTracking()
                 .ToListAsync();
         }

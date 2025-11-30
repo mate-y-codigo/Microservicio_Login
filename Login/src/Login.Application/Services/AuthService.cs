@@ -65,7 +65,7 @@ public class AuthService : IAuthService
         {
             new Claim(JwtRegisteredClaimNames.Sub, usuario.Id.ToString()), // ID del usuario
             new Claim(JwtRegisteredClaimNames.Email, usuario.email),
-            new Claim("nombre", usuario.nombre),
+            new Claim("nombre", usuario.nombre + " " + usuario.apellido),
             new Claim(ClaimTypes.Role, usuario.Rol.nombre) // Añadimos el Rol
         };
 
